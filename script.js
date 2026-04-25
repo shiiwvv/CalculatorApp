@@ -4,8 +4,11 @@
 
 const buttons = document.querySelector('.calc-buttons');
 const display = document.querySelector('.calc-display');
-console.log(display);
-const validInput = new Set([..."123456789+-*/%."]);
+let p = document.createElement('p');
+p.setAttribute('class' , 'display-font');
+display.appendChild(p);
+
+const validInput = new Set([..."0123456789+-*/%."]);
 
 const ops = {
     expression : "",
@@ -38,7 +41,10 @@ buttons.addEventListener('click' , (event) =>{
         ops.expression = "";
     }
     console.log(ops.expression);
-    display.innerHTML = `<p class="display-font">${ops.expression}</p>`;
+    // display.innerHTML = `<p class="display-font">${ops.expression}</p>`;
+    p.textContent = `${ops.expression}`;
+    //Make the Screen stick with the last Digit, on the right..
+    p.scrollLeft += p.scrollWidth;
     if(EnterValue == "="){
         performOperation(ops);
     }
@@ -47,12 +53,14 @@ buttons.addEventListener('click' , (event) =>{
 function performOperation(ops){
     try{
         const result = math.evaluate(`${ops.expression}`) ;
-        display.innerHTML = `<p class="display-font">${result}</p>`;
+        // display.innerHTML = `<p class="display-font">${result}</p>`;
+        p.textContent = `${result}`;
         resetValue(ops);
         console.log(result);
     }
     catch(err){
-        display.innerHTML = `<p class="display-font">Syntax Error </p>`;
+        // display.innerHTML = `<p class="display-font">Syntax Error </p>`;
+        p.textContent = `Syntaax Error`;
         resetValue(ops);
     }
 }
