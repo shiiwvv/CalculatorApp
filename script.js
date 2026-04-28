@@ -2,11 +2,18 @@
 // import * as math from './node_modules/mathjs/lib/browser/math.js';
 //They didn't work dont know why that's why i had to load it via html.
 
+// const { log } = require("mathjs");
+
 const buttons = document.querySelector('.calc-buttons');
 const display = document.querySelector('.calc-display');
 let p = document.createElement('p');
 p.setAttribute('class' , 'display-font');
 display.appendChild(p);
+
+
+let historyCalc = [];//For storing the history..
+//Storing the list in LocalStorage
+localStorage.setItem('history' , JSON.stringify(historyCalc));
 
 const validInput = new Set([..."0123456789+-*/%."]);
 
@@ -52,9 +59,12 @@ buttons.addEventListener('click' , (event) =>{
 
 function performOperation(ops){
     try{
+        const exp = ops.expression;
         const result = math.evaluate(`${ops.expression}`) ;
+        ops.expression = `${result}`;
         // display.innerHTML = `<p class="display-font">${result}</p>`;
-        p.textContent = `${result}`;
+        p.textContent = `${ops.expression}`;
+        pushLocal(exp , result);
         resetValue(ops);
         console.log(result);
     }
@@ -65,7 +75,32 @@ function performOperation(ops){
     }
 }
 
+function pushLocal(expression , result){
+    // const h1 = {expression : expression , result : result};
+    //or
+    const h1 = {expression , result};
+    let retHistory = getLocal('history');
+    if(retHistory != null){
+        retHistory.push(h1);
+        localStorage.setItem('history' , JSON.stringify(retHistory));
+        console.log("Saved To Local.");
+    }
+    else{
+        console.log("Error.");
+    }
+}
+
+function getLocal(key){
+    const strHistory = localStorage.getItem(`${key}`);
+    if(strHistory){
+        return JSON.parse(strHistory);
+    }
+    else{
+        return null;
+    }
+}
+
 function resetValue(ops){
-    ops.expression = "";
+    // ops.expression = "";
     ops.bracketOpen = false;
 }
