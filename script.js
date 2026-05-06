@@ -11,9 +11,13 @@ p.setAttribute('class' , 'display-font');
 display.appendChild(p);
 
 
-let historyCalc = [];//For storing the history..
-//Storing the list in LocalStorage
-localStorage.setItem('history' , JSON.stringify(historyCalc));
+// let historyCalc = [];//For storing the history..
+// //Storing the list in LocalStorage
+// localStorage.setItem('history' , JSON.stringify(historyCalc));
+
+/*This whole thing failed because, since everytime this Js file loads on the browser. All the previous stored data gets Overridden.. So to avoid that*/
+
+let historyCalc = JSON.parse(localStorage.getItem('history')) || [];
 
 const validInput = new Set([..."0123456789+-*/%."]);
 
@@ -51,7 +55,10 @@ buttons.addEventListener('click' , (event) =>{
     // display.innerHTML = `<p class="display-font">${ops.expression}</p>`;
     p.textContent = `${ops.expression}`;
     //Make the Screen stick with the last Digit, on the right..
-    p.scrollLeft += p.scrollWidth;
+    // p.scrollLeft += p.scrollWidth;
+    /*This Also works but better apporach*/
+    p.scrollLeft = p.scrollWidth - p.clientWidth;
+
     if(EnterValue == "="){
         performOperation(ops);
     }
@@ -81,6 +88,7 @@ function pushLocal(expression , result){
     const h1 = {expression , result};
     let retHistory = getLocal('history');
     if(retHistory != null){
+        console.log(retHistory);
         retHistory.push(h1);
         localStorage.setItem('history' , JSON.stringify(retHistory));
         console.log("Saved To Local.");
