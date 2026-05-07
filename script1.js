@@ -69,7 +69,7 @@ function historyy(){
 
     const data = getLocal();
     if(!data){
-        div.innerHTML = `Couldn't Load History`;
+        settingsBody.innerHTML = `Couldn't Load History`;
     }
     else{
         settingsBody.innerHTML = "";
@@ -188,5 +188,3 @@ function applyTheme(theme){
 
     localStorage.setItem('theme' , JSON.stringify(theme));
 }
-
-// applyTheme(Theme);

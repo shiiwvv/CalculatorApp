@@ -2,8 +2,6 @@
 // import * as math from './node_modules/mathjs/lib/browser/math.js';
 //They didn't work dont know why that's why i had to load it via html.
 
-// const { log } = require("mathjs");
-
 const buttons = document.querySelector('.calc-buttons');
 const display = document.querySelector('.calc-display');
 let p = document.createElement('p');
@@ -25,8 +23,7 @@ const ops = {
     expression : "",
     bracketOpen : false 
 }
-// let expression = ""; 
-// let bracketOpen = false;
+
 
 buttons.addEventListener('click' , (event) =>{
     const eventTarget = event.target.closest('.buttons');
@@ -86,16 +83,10 @@ function pushLocal(expression , result){
     // const h1 = {expression : expression , result : result};
     //or
     const h1 = {expression , result};
-    let retHistory = getLocal('history');
-    if(retHistory != null){
-        console.log(retHistory);
-        retHistory.push(h1);
-        localStorage.setItem('history' , JSON.stringify(retHistory));
-        console.log("Saved To Local.");
-    }
-    else{
-        console.log("Error.");
-    }
+    historyCalc.push(h1);
+    console.log(historyCalc);
+    localStorage.setItem('history' , JSON.stringify(historyCalc));
+    console.log("Saved To Local.");
 }
 
 function getLocal(key){
@@ -112,3 +103,4 @@ function resetValue(ops){
     // ops.expression = "";
     ops.bracketOpen = false;
 }
+
